@@ -136,16 +136,30 @@ function handleProfileError(error: any, defaultMessage: string) {
 		console.log(chalk.red('Error: ' + error.message || defaultMessage));
 		console.log(chalk.red('Session expired. Run: insighta login'));
 	} else if (error.response?.status === 403) {
-		console.log(chalk.red('Error: ' + error.message || 'You don\'t have permission to perform this action'));
+		console.log(
+			chalk.red(
+				'Error: ' + error.message ||
+					"You don't have permission to perform this action"
+			)
+		);
 	} else if (error.code === 'ECONNREFUSED') {
-		console.log(chalk.red('Error: ' + error.message || 'Could not reach the server. Is the backend running?'));
+		console.log(
+			chalk.red(
+				'Error: ' + error.message ||
+					'Could not reach the server. Is the backend running?'
+			)
+		);
 	} else if (error.response?.status === 429) {
-		console.log(chalk.red('Error: ' + error.message || 'Rate limit exceeded. Try again in a moment.'));
-	} else {
-		console.log(chalk.red('Error: ' + (error.message || defaultMessage)));
-	}
-} else if (error.response?.status === 404) {
-		console.log(chalk.red('Error: ' + error.message || 'Profile not found'));
+		console.log(
+			chalk.red(
+				'Error: ' + error.message ||
+					'Rate limit exceeded. Try again in a moment.'
+			)
+		);
+	} else if (error.response?.status === 404) {
+		console.log(
+			chalk.red('Error: ' + error.message || 'Profile not found')
+		);
 	} else {
 		console.log(chalk.red('Error: ' + (error.message || defaultMessage)));
 	}
