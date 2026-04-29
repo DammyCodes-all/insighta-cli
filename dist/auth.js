@@ -2,7 +2,7 @@ import * as http from 'http';
 import * as crypto from 'crypto';
 import { readCredentials, clearCredentials } from './credentials.js';
 import api from './api.js';
-const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:3000';
+const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:8000';
 export async function login() {
     console.log('Starting login process...');
     const state = 'cli:' + crypto.randomBytes(16).toString('hex');
@@ -35,9 +35,23 @@ export async function logout() {
 export async function whoami() {
     try {
         const response = await api.get('/auth/me');
-        console.log('User info:', response.data);
+        console.log(`✅ Logged in as @${response.data.username} (${response.data.role})`);
     }
     catch (error) {
-        console.error('Failed to get user info:', error);
+        if (error.response?.status === 401) {
+            console.log('Session expired. Run: insighta login');
+        }
+        else if (error.response?.status === 403) {
+            console.log("You don't have permission to perform this action");
+        }
+        else if (error.code === 'ECONNREFUSED') {
+            console.log('Could not reach the server. Is the backend running?');
+        }
+        else if (error.response?.status === 429) {
+            console.log('Rate limit exceeded. Try again in a moment.');
+        }
+        else {
+            console.log(`Error: ${error.message || 'Unknown error'}`);
+        }
     }
 }
