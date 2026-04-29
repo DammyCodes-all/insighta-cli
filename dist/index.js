@@ -46,31 +46,36 @@ profilesCmd
     .action(async (opts) => {
     await listProfiles(opts);
 });
-program
+profilesCmd
     .command('get')
     .description('Get a specific profile by ID')
     .argument('<id>', 'profile ID')
     .action(async (id) => {
     await getProfile(id);
 });
-program
+profilesCmd
     .command('search')
     .description('Search profiles with natural language query')
     .argument('<query>', 'search query (e.g., "male from nigeria above 30")')
     .action(async (query) => {
     await searchProfiles(query, {});
 });
-program
+profilesCmd
     .command('create')
     .description('Create a new profile')
-    .argument('<name>', 'profile name')
-    .action(async (name) => {
-    await createProfile(name);
+    .option('-n, --name <name>', 'profile name')
+    .action(async (options) => {
+    await createProfile(options.name);
 });
-program
+profilesCmd
     .command('export')
     .description('Export profiles to CSV')
     .option('-f, --format <format>', 'export format', 'csv')
+    .option('-g, --gender <type>', 'filter by gender (male, female)')
+    .option('-c, --country <code>', 'filter by country ISO code')
+    .option('--age-group <group>', 'filter by age group (child, teenager, adult, senior)')
+    .option('--min-age <age>', 'minimum age filter')
+    .option('--max-age <age>', 'maximum age filter')
     .action(async (options) => {
     await exportProfiles(options);
 });

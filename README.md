@@ -6,12 +6,21 @@ The Insighta CLI is a command-line interface for the Insighta Labs+ platform tha
 
 ## System Architecture
 
-The system consists of three main components:
-1. **Backend API** - Handles authentication, profile management, and data processing
-2. **CLI Tool** - Command-line interface for analysts and administrators
-3. **Web Portal** - Browser-based interface for end users
+The system consists of three main components that work together:
 
-All interfaces connect to the same backend system, ensuring consistency across platforms.
+1. **Backend API** - Handles authentication, profile management, and data processing. Serves as the central point for all data operations and enforces role-based access control. The backend uses a SQLite database for storage and implements GitHub OAuth with PKCE for authentication.
+
+2. **CLI Tool** - Command-line interface that connects to the backend via REST API. All API requests include authentication headers for access token management.
+
+3. **Web Portal** - Browser-based interface that uses HTTP-only cookies for secure session management and implements CSRF protection.
+
+The architecture implements a secure system with:
+- GitHub OAuth 2.0 with PKCE for authentication
+- HTTP-only cookies and CSRF protection for the web portal
+- Automatic token refresh when access tokens expire
+- Role-based access control enforced at the API level
+- Rate limiting (60 requests/minute for profiles, 10 requests/minute for auth)
+- All components connect to the same backend but use different authentication mechanisms
 
 ## Authentication Flow
 
@@ -51,14 +60,31 @@ insighta logout         # Remove authentication tokens
 insighta whoami         # Display current user information
 ```
 
+Credentials are stored at `~/.insighta/credentials.json`
+
 ### Profile Commands
 ```bash
 insighta profiles list     # List all profiles with filtering options
-insighta get <id>          # Get specific profile by ID
-insighta search <query>     # Search profiles with natural language
-insighta create <name>     # Create new profile
-insighta export             # Export profiles to CSV
+insighta profiles get <id> # Get specific profile by ID
+insighta profiles search <query> # Search profiles with natural language
+insighta profiles create --name <name> # Create new profile
+insighta profiles export # Export profiles to CSV
 ```
+
+### Profile List Options
+```bash
+insighta profiles list --gender male
+insighta profiles list --country NG --age-group adult
+insighta profiles list --min-age 25 --max-age 40
+insighta profiles list --sort-by age --order desc
+insighta profiles list --page 2 --limit 20
+```
+
+### Token Refresh Behavior
+The CLI automatically handles token refresh when access tokens expire. When a 401 Unauthorized response is received, the CLI will:
+1. Use the refresh token to obtain new access and refresh tokens
+2. Retry the original request with the new access token
+3. If refresh fails, prompt the user to re-authenticate with `insighta login`
 
 ## Profile Features
 - GitHub OAuth authentication with PKCE implementation
@@ -108,6 +134,11 @@ Profiles can be exported to CSV format with all filters preserved:
 - Country
 - Age group
 - Custom query parameters
+
+### Export with Filters
+```bash
+insighta profiles export --format csv --gender male --country NG
+```
 
 ## System Requirements
 

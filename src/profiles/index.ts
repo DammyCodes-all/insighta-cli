@@ -116,7 +116,15 @@ export async function exportProfiles(options: any) {
 	const spinner = createSpinner('Exporting profiles...');
 
 	try {
-		const params: any = { format };
+		const params: any = {};
+
+		// Map options to query parameters
+		if (options.format) params.format = options.format;
+		if (options.gender) params.gender = options.gender;
+		if (options.country) params.country_id = options.country;
+		if (options['age-group']) params.age_group = options['age-group'];
+		if (options['min-age']) params.min_age = options['min-age'];
+		if (options['max-age']) params.max_age = options['max-age'];
 
 		const response = await withSpinner(spinner, () =>
 			api.get('/api/profiles/export', {
