@@ -35,23 +35,9 @@ export async function logout() {
 export async function whoami() {
     try {
         const response = await api.get('/auth/me');
-        console.log(`✅ Logged in as @${response.data.username} (${response.data.role})`);
+        console.log('User info:', response.data);
     }
     catch (error) {
-        if (error.response?.status === 401) {
-            console.log('Session expired. Run: insighta login');
-        }
-        else if (error.response?.status === 403) {
-            console.log("You don't have permission to perform this action");
-        }
-        else if (error.code === 'ECONNREFUSED') {
-            console.log('Could not reach the server. Is the backend running?');
-        }
-        else if (error.response?.status === 429) {
-            console.log('Rate limit exceeded. Try again in a moment.');
-        }
-        else {
-            console.log(`Error: ${error.message || 'Unknown error'}`);
-        }
+        console.error('Failed to get user info:', error);
     }
 }
