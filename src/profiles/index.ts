@@ -133,34 +133,30 @@ export async function exportProfiles(options: any) {
 
 function handleProfileError(error: any, defaultMessage: string) {
 	if (error.response?.status === 401) {
-		console.log(chalk.red('Error: ' + error.message || defaultMessage));
-		console.log(chalk.red('Session expired. Run: insighta login'));
+		console.log(chalk.red('Error: Session expired. Run: insighta login'));
+		process.exit(1);
 	} else if (error.response?.status === 403) {
 		console.log(
-			chalk.red(
-				'Error: ' + error.message ||
-					"You don't have permission to perform this action"
-			)
+			chalk.red("You don't have permission to perform this action")
 		);
+		process.exit(1);
+	} else if (error.response?.status === 404) {
+		console.log(chalk.red('Error: Profile not found'));
+		process.exit(1);
 	} else if (error.code === 'ECONNREFUSED') {
 		console.log(
 			chalk.red(
-				'Error: ' + error.message ||
-					'Could not reach the server. Is the backend running?'
+				'Error: Could not reach the server. Is the backend running?'
 			)
 		);
+		process.exit(1);
 	} else if (error.response?.status === 429) {
 		console.log(
-			chalk.red(
-				'Error: ' + error.message ||
-					'Rate limit exceeded. Try again in a moment.'
-			)
+			chalk.red('Error: Rate limit exceeded. Try again in a moment.')
 		);
-	} else if (error.response?.status === 404) {
-		console.log(
-			chalk.red('Error: ' + error.message || 'Profile not found')
-		);
+		process.exit(1);
 	} else {
 		console.log(chalk.red('Error: ' + (error.message || defaultMessage)));
+		process.exit(1);
 	}
 }
