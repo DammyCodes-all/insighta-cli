@@ -13,13 +13,13 @@ const tableColumns = [
 	{ title: 'Country', key: 'country_id' }
 ];
 
-// We'll implement the functions properly
 export async function listProfiles(options: any) {
 	const spinner = createSpinner('Fetching profiles...');
 
 	try {
 		const params: any = {};
 
+		// Map options to query parameters
 		if (options.gender) params.gender = options.gender;
 		if (options.country) params.country_id = options.country;
 		if (options['age-group']) params.age_group = options['age-group'];
@@ -40,7 +40,9 @@ export async function listProfiles(options: any) {
 			if (response.data.total_pages) {
 				console.log(
 					chalk.gray(
-						`\nPage ${response.data.page}/${response.data.total_pages} - total results: ${response.data.total}`
+						`\nPage ${response.data.page}/${
+							response.data.total_pages
+						} - total results: ${response.data.total}`
 					)
 				);
 			}
@@ -134,8 +136,6 @@ function handleProfileError(error: any, defaultMessage: string) {
 		console.log('Session expired. Run: insighta login');
 	} else if (error.response?.status === 403) {
 		console.log("You don't have permission to perform this action");
-	} else if (error.response?.status === 404) {
-		console.log('Profile not found');
 	} else if (error.code === 'ECONNREFUSED') {
 		console.log('Could not reach the server. Is the backend running?');
 	} else if (error.response?.status === 429) {

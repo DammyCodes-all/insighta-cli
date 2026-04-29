@@ -10,11 +10,11 @@ const tableColumns = [
     { title: 'Age Group', key: 'age_group' },
     { title: 'Country', key: 'country_id' }
 ];
-// We'll implement the functions properly
 export async function listProfiles(options) {
     const spinner = createSpinner('Fetching profiles...');
     try {
         const params = {};
+        // Map options to query parameters
         if (options.gender)
             params.gender = options.gender;
         if (options.country)
@@ -113,9 +113,6 @@ function handleProfileError(error, defaultMessage) {
     }
     else if (error.response?.status === 403) {
         console.log("You don't have permission to perform this action");
-    }
-    else if (error.response?.status === 404) {
-        console.log('Profile not found');
     }
     else if (error.code === 'ECONNREFUSED') {
         console.log('Could not reach the server. Is the backend running?');
