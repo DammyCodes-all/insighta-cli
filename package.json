@@ -38,6 +38,7 @@
 		"commander": "^14.0.3",
 		"get-package-json-file": "^2.0.0",
 		"meow": "^14.1.0",
+		"open": "^11.0.0",
 		"ora": "^9.4.0",
 		"typescript": "^6.0.3"
 	},
