@@ -19,21 +19,23 @@ program
 
 program
 	.command('login')
-	.description('Log in to the Insighta platform')
+	.description('Log in to the Insighta platform using GitHub authentication')
 	.action(async () => {
 		await login();
 	});
 
 program
 	.command('logout')
-	.description('Log out from the Insighta platform')
+	.description(
+		'Log out from the Insighta platform and clear local credentials'
+	)
 	.action(async () => {
 		await logout();
 	});
 
 program
 	.command('whoami')
-	.description('Display current user information')
+	.description('Display current user information and authentication status')
 	.action(async () => {
 		await whoami();
 	});
