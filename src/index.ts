@@ -38,7 +38,6 @@ program
 		await whoami();
 	});
 
-// Add profile subcommands
 const profilesCmd = program
 	.command('profiles')
 	.description('Manage profiles')
