@@ -10,7 +10,9 @@ import {
 } from './credentials.js';
 import api from './api.js';
 
-const BACKEND_URL: string = process.env.BACKEND_URL || 'http://localhost:8000';
+const BACKEND_URL: string =
+	process.env.BACKEND_URL ||
+	'https://hng-i14-backend-production.up.railway.app';
 
 interface AuthResponse {
 	data: {

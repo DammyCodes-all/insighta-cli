@@ -12,7 +12,9 @@ const httpsAgent = new https.Agent({
 });
 
 // Create axios instance with common configuration
-const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:8000';
+const BACKEND_URL =
+	process.env.BACKEND_URL ||
+	'https://hng-i14-backend-production.up.railway.app';
 
 export const api = axios.create({
 	baseURL: BACKEND_URL,
